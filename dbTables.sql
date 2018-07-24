@@ -23,4 +23,6 @@ create table users.address_details(
 	country varchar(255) not null,
 );
 alter table users.user_details add foreign key (billAddressID) references users.address_details(addressID);
---drop database ECommerce;
+
+truncate table users.user_details;
+truncate table users.address_details;

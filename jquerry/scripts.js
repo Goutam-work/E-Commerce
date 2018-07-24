@@ -134,7 +134,7 @@ function senddata()
 	var state= $("#stateSelect option:selected").val();
 
 	$.ajax({
-		 url:"register.cfc",
+		 url:"cfComponents/register.cfc",
 		 data: {
 			 method : "registration",
 			 fname : fname,
@@ -153,8 +153,7 @@ function senddata()
 		},
 		type:"POST",
 		datatype:"json",
-		success: function(data){
-			console.log(data);
+		success: function(){
 			return true;
 		},
 		error: function(){
@@ -214,14 +213,39 @@ function validText(text) {
 function validMail(mail) {
         var patt = /^(\w[\w_.]+)@(\S)+\.([a-zA-Z]+)$/;
         if ($(mail).val().match(patt)) {
-            $(mail).css("border", "1px solid rgb(11, 243, 116)");
-            $("#mailError").text("").removeClass("errorMessage");
-        }
+        	checkMailExists($(mail).val(),function(data){
+        		if(data){
+                	$(mail).css("border", "1px solid #ff0000");
+                    $("#mailError").text("Email ID already exists !!").addClass("errorMessage");
+                }
+            	else{
+    	            $(mail).css("border", "1px solid rgb(11, 243, 116)");
+    	            $("#mailError").text("").removeClass("errorMessage");
+            	}
+        	});
+        	
+        }        
         else {
             $(mail).css("border", "1px solid #ff0000");
             $("#mailError").text("Enter a valid email !!").addClass("errorMessage");
         }
     }
+function checkMailExists(mail,callback)
+{
+	$.ajax({
+		 url:"cfComponents/checkEmail.cfc",
+		 data: {
+			 method : "checkEmail",
+			 mail : mail,
+		},
+		type:"GET",
+		datatype:"json",
+		success: callback,
+		error: function(){
+			console.log("mail ajax error");
+		}
+	});
+}
 function validPhNo(number) {
     var length = $(number).val().length;
         var numbers = /^[0-9]+$/;

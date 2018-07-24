@@ -1,41 +1,57 @@
+<cfcomponent  output="false" >
 
-<cfcomponent  output="true" >
-
-
-	<cffunction name="registration" access="remote" output="true">
-		<cfargument name="fname" type="any" required="true" >
-		<cfargument name="mname" type="any" required="false" >
-		<cfargument name="lname" type="any" required="true" >
-		<cfargument name="mail" type="any" required="true" >
-		<cfargument name="phone" type="any" required="true" >
-		<cfargument name="password" type="any" required="true" >
-		<cfargument name="dob" type="any" required="true" >
-		<cfargument name="gender" type="any" required="true" >
-		<cfargument name="address" type="any" required="true" >
-		<cfargument name="city" type="any" required="true" >
-		<cfargument name="zip" type="any" required="true" >
-		<cfargument name="country" type="any" required="true" >
-		<cfargument name="state" type="any" required="true" >
+	<cffunction name="registration" access="remote" output="false">
+		<cfargument name="fname" required="true" >
+		<cfargument name="mname" required="false" default = null>
+		<cfargument name="lname" required="true" >
+		<cfargument name="mail" required="true" >
+		<cfargument name="phone" required="true" >
+		<cfargument name="password" required="true" >
+		<cfargument name="dob" required="true" >
+		<cfargument name="gender" required="true" >
+		<cfargument name="address" required="true" >
+		<cfargument name="city" required="true" >
+		<cfargument name="zip" required="true" >
+		<cfargument name="country"  required="true" >
+		<cfargument name="state" required="true" >
 
 		<cfquery name="mailCheckQuery" result="countEmail" datasource="ECommerce">
-	    	select Email from users.user_details where Email='#arguments.mail#';
+	    	SELECT userID FROM users.user_details;
 		</cfquery>
-		<cfset variables.result = structNew()>
 
 		<cfif #mailCheckQuery.recordCount# LT 1 >
-				<cfquery name="insertAddress" result="addressID" datasource="ECommerce">
-				insert into users.address_details values('#arguments.address#','#arguments.city#',#arguments.zip#,'#arguments.country#','#arguments.state#');
-				</cfquery>
-				<cfquery name="insertRecord" datasource="ECommerce" >
-	    	insert into users.user_details values('#arguments.fname#','#arguments.mname#','#arguments.lname#','#arguments.mail#',#arguments.phone#,'#arguments.password#','#arguments.dob#','#arguments.gender#',#addressID.IDENTITYCOL#,'','');
-				</cfquery>
-				<cfset variables.result.success = true>
+			<cfset variables.role = 1 />
 		<cfelse>
-				<cfset variables.result.success = false>
+			<cfset variables.role = 0 />
 		</cfif>
-		
-			<cfreturn serializeJSON(variables.result) />
-		
+			<cfquery name="insertAddress" result="addressID" datasource="ECommerce">
+				INSERT INTO users.address_details VALUES
+				(<!--- '#arguments.address#','#arguments.city#',#arguments.zip#,'#arguments.country#','#arguments.state#'); --->
+				<cfqueryparam value="#arguments.address#" cfsqltype="cf_sql_varchar" />,
+				<cfqueryparam value="#arguments.city#" cfsqltype="cf_sql_varchar" />,
+				<cfqueryparam value="#arguments.zip#" cfsqltype="cf_sql_integer" />,
+				<cfqueryparam value="#arguments.country#" cfsqltype="cf_sql_varchar" />,
+				<cfqueryparam value="#arguments.state#" cfsqltype="cf_sql_varchar" />
+				);
+		</cfquery>
+		<cfquery name="insertRecordAdmin" datasource="ECommerce" >
+		    	INSERT INTO users.user_details VALUES
+		    	(
+		    	<!--- '#arguments.fname#','#arguments.mname#','#arguments.lname#','#arguments.mail#',#arguments.phone#,
+		    	'#arguments.password#','#arguments.dob#','#arguments.gender#',#addressID.IDENTITYCOL#,1,''); --->
+	    		<cfqueryparam value="#arguments.fname#" cfsqltype="cf_sql_varchar" />,
+	    		<cfqueryparam value="#arguments.mname#" cfsqltype="cf_sql_varchar" />,
+	    		<cfqueryparam value="#arguments.lname#" cfsqltype="cf_sql_varchar" />,
+	    		<cfqueryparam value="#arguments.mail#" cfsqltype="cf_sql_varchar" />,
+	    		<cfqueryparam value="#arguments.phone#" cfsqltype="cf_sql_biginteger" />,
+	    		<cfqueryparam value="#arguments.password#" cfsqltype="cf_sql_varchar" />,
+	    		<cfqueryparam value="#arguments.dob#" cfsqltype="cf_sql_date" />,
+	    		<cfqueryparam value="#arguments.gender#" cfsqltype="cf_sql_varchar" />,
+	    		<cfqueryparam value="#addressID.IDENTITYCOL#" cfsqltype="cf_sql_integer" />,
+	    		<cfqueryparam value="#variables.role#" cfsqltype="cf_sql_bit" />,
+	    		<cfqueryparam value="0" cfsqltype="cf_sql_bit" />
+				);
+		</cfquery>
 	</cffunction>
 
 </cfcomponent>
