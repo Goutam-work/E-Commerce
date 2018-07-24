@@ -15,16 +15,16 @@
 		<cfargument name="country"  required="true" >
 		<cfargument name="state" required="true" >
 
-		<cfquery name="mailCheckQuery" result="countEmail" datasource="ECommerce">
-	    	SELECT userID FROM users.user_details;
+		<cfquery name="mailCheckQuery" result="countEmail">
+	    	SELECT TOP 1 userID FROM users.user_details;
 		</cfquery>
 
-		<cfif #mailCheckQuery.recordCount# LT 1 >
-			<cfset variables.role = 1 />
-		<cfelse>
+		<cfif #mailCheckQuery.recordCount# >
 			<cfset variables.role = 0 />
+		<cfelse>
+			<cfset variables.role = 1 />
 		</cfif>
-			<cfquery name="insertAddress" result="addressID" datasource="ECommerce">
+			<cfquery name="insertAddress" result="addressID" >
 				INSERT INTO users.address_details VALUES
 				(<!--- '#arguments.address#','#arguments.city#',#arguments.zip#,'#arguments.country#','#arguments.state#'); --->
 				<cfqueryparam value="#arguments.address#" cfsqltype="cf_sql_varchar" />,
@@ -34,7 +34,7 @@
 				<cfqueryparam value="#arguments.state#" cfsqltype="cf_sql_varchar" />
 				);
 		</cfquery>
-		<cfquery name="insertRecordAdmin" datasource="ECommerce" >
+		<cfquery name="insertRecordAdmin" >
 		    	INSERT INTO users.user_details VALUES
 		    	(
 		    	<!--- '#arguments.fname#','#arguments.mname#','#arguments.lname#','#arguments.mail#',#arguments.phone#,

@@ -1,4 +1,4 @@
-//"use strict";
+"use strict";
 var stateByCountry = {
     USA: ["NY", "NJ"],
     Singapore: ["taas", "naas"]
@@ -27,7 +27,7 @@ $(document).ready(function () {
     });
     $("#mail").on("blur", function (e) {
         if(checkEmpty("#mail")){
-            validMail("#mail");
+            validMail("#mail",false);
             }        
     });
     $("#phone").on("blur", function (e) {
@@ -68,8 +68,12 @@ $(document).ready(function () {
     $("#countrySelect").on("blur", function (e) {
         checkEmpty("#countrySelect");
     });
+    $("#registerSubmit").on("click",function(e){
+    	e.preventDefault();
+    	return validateRegistrationForm();
+    });
 });
-function validateForm(){
+function validateRegistrationForm(){
     if(checkEmpty("#fname")){
         validText("#fname");
     }
@@ -83,9 +87,7 @@ function validateForm(){
     if(checkEmpty("#lname")){
         validText("#lname");
     }
-    if(checkEmpty("#mail")){
-        validMail("#mail");
-    } 
+ 
     if(checkEmpty("#phone")){
         validPhNo("#phone");
     }
@@ -112,12 +114,17 @@ function validateForm(){
     if($("#registrationForm").find(".errorMessage").length){
         return false;
     }
-    else{
-    	 senddata();
+    else {
+        if(checkEmpty("#mail")){
+            validMail("#mail",true);
+        }
+        else{
+        	return false;
+        }
     }
    
 }
-function senddata()
+function sendData()
 {
 	var fname= $("#fname").val();
 	var mname=$("#mname").val();
@@ -154,6 +161,7 @@ function senddata()
 		type:"POST",
 		datatype:"json",
 		success: function(){
+			$("#scrollable").html("<h1>Registration sucessfull !!</h1>");
 			return true;
 		},
 		error: function(){
@@ -210,18 +218,23 @@ function validText(text) {
     }
     
 }
-function validMail(mail) {
+function validMail(mail,dataStatus) {
         var patt = /^(\w[\w_.]+)@(\S)+\.([a-zA-Z]+)$/;
         if ($(mail).val().match(patt)) {
         	checkMailExists($(mail).val(),function(data){
-        		if(data){
+        		console.log(data);
+        		if(data == "true"){
                 	$(mail).css("border", "1px solid #ff0000");
                     $("#mailError").text("Email ID already exists !!").addClass("errorMessage");
                 }
             	else{
     	            $(mail).css("border", "1px solid rgb(11, 243, 116)");
     	            $("#mailError").text("").removeClass("errorMessage");
+    	            if(dataStatus){
+    	            	sendData();
+    	            }
             	}
+        		
         	});
         	
         }        
