@@ -2,7 +2,7 @@
 
 	<cffunction name="registration" access="remote" output="false">
 		<cfargument name="fname" required="true" >
-		<cfargument name="mname" required="false" default = null>
+		<cfargument name="mname" required="false">
 		<cfargument name="lname" required="true" >
 		<cfargument name="mail" required="true" >
 		<cfargument name="phone" required="true" >
@@ -16,40 +16,36 @@
 		<cfargument name="state" required="true" >
 
 		<cfquery name="mailCheckQuery" result="countEmail">
-	    	SELECT TOP 1 userID FROM users.user_details;
+	    	SELECT CASE COUNT(userID)
+			WHEN 0 THEN 1
+			ELSE 0
+			END AS role FROM users.user_details;
 		</cfquery>
 
-		<cfif #mailCheckQuery.recordCount# >
-			<cfset variables.role = 0 />
-		<cfelse>
-			<cfset variables.role = 1 />
-		</cfif>
 			<cfquery name="insertAddress" result="addressID" >
 				INSERT INTO users.address_details VALUES
-				(<!--- '#arguments.address#','#arguments.city#',#arguments.zip#,'#arguments.country#','#arguments.state#'); --->
-				<cfqueryparam value="#arguments.address#" cfsqltype="cf_sql_varchar" />,
-				<cfqueryparam value="#arguments.city#" cfsqltype="cf_sql_varchar" />,
-				<cfqueryparam value="#arguments.zip#" cfsqltype="cf_sql_integer" />,
-				<cfqueryparam value="#arguments.country#" cfsqltype="cf_sql_varchar" />,
-				<cfqueryparam value="#arguments.state#" cfsqltype="cf_sql_varchar" />
+				(
+				<cfqueryparam value="#arguments.address#" cfsqltype = "cf_sql_varchar" />,
+				<cfqueryparam value="#arguments.city#" cfsqltype = "cf_sql_varchar" />,
+				<cfqueryparam value="#arguments.zip#" cfsqltype = "cf_sql_integer" />,
+				<cfqueryparam value="#arguments.country#" cfsqltype = "cf_sql_varchar" />,
+				<cfqueryparam value="#arguments.state#" cfsqltype = "cf_sql_varchar" />
 				);
 		</cfquery>
-		<cfquery name="insertRecordAdmin" >
+		<cfquery name="insertRecord" >
 		    	INSERT INTO users.user_details VALUES
 		    	(
-		    	<!--- '#arguments.fname#','#arguments.mname#','#arguments.lname#','#arguments.mail#',#arguments.phone#,
-		    	'#arguments.password#','#arguments.dob#','#arguments.gender#',#addressID.IDENTITYCOL#,1,''); --->
-	    		<cfqueryparam value="#arguments.fname#" cfsqltype="cf_sql_varchar" />,
-	    		<cfqueryparam value="#arguments.mname#" cfsqltype="cf_sql_varchar" />,
-	    		<cfqueryparam value="#arguments.lname#" cfsqltype="cf_sql_varchar" />,
-	    		<cfqueryparam value="#arguments.mail#" cfsqltype="cf_sql_varchar" />,
-	    		<cfqueryparam value="#arguments.phone#" cfsqltype="cf_sql_biginteger" />,
-	    		<cfqueryparam value="#arguments.password#" cfsqltype="cf_sql_varchar" />,
-	    		<cfqueryparam value="#arguments.dob#" cfsqltype="cf_sql_date" />,
-	    		<cfqueryparam value="#arguments.gender#" cfsqltype="cf_sql_varchar" />,
-	    		<cfqueryparam value="#addressID.IDENTITYCOL#" cfsqltype="cf_sql_integer" />,
-	    		<cfqueryparam value="#variables.role#" cfsqltype="cf_sql_bit" />,
-	    		<cfqueryparam value="0" cfsqltype="cf_sql_bit" />
+	    		<cfqueryparam value="#arguments.fname#" cfsqltype = "cf_sql_varchar" />,
+	    		<cfqueryparam value="#arguments.mname#" cfsqltype = "cf_sql_varchar" null = "#not len(arguments.mname)#" />,
+	    		<cfqueryparam value="#arguments.lname#" cfsqltype ="cf_sql_varchar" />,
+	    		<cfqueryparam value="#arguments.mail#" cfsqltype ="cf_sql_varchar" />,
+	    		<cfqueryparam value="#arguments.phone#" cfsqltype ="cf_sql_biginteger" />,
+	    		<cfqueryparam value="#arguments.password#" cfsqltype ="cf_sql_varchar" />,
+	    		<cfqueryparam value="#arguments.dob#" cfsqltype = "cf_sql_date" />,
+	    		<cfqueryparam value="#arguments.gender#" cfsqltype = "cf_sql_varchar" />,
+	    		<cfqueryparam value="#addressID.IDENTITYCOL#" cfsqltype = "cf_sql_integer" />,
+	    		<cfqueryparam value="#mailCheckQuery.role#" cfsqltype = "cf_sql_bit" />,
+	    		<cfqueryparam value="0" cfsqltype = "cf_sql_bit" />
 				);
 		</cfquery>
 	</cffunction>

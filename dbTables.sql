@@ -51,3 +51,15 @@ ALTER TABLE product.product_subCategory ADD FOREIGN KEY (categoryID) REFERENCES 
 
 truncate table users.user_details;
 truncate table users.address_details;
+
+
+truncate table product.product;
+truncate table product.product_category;
+truncate table product.product_subCategory;
+
+	    	SELECT subCategoryName FROM product.product_subCategory
+	    	where categoryID = <cfqueryparam value = "#categoryID#" cfsqltype = "cf_sql_integer"  />;
+
+	    	 SELECT S.subCategoryID,S.subCategoryName,C.categoryName,C.categoryID FROM product.product_subCategory AS S
+  			INNER JOIN product.product_category AS C ON S.categoryID = C.categoryID
+			ORDER BY C.categoryID;

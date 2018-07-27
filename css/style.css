@@ -38,6 +38,6 @@ footer {
     height: 450px;
     overflow: auto;
 }
-#sucessMessage{
+.sucessMessage{
 	display:none;
 }

@@ -1,8 +1,10 @@
 "use strict";
+//global variable to set country and state
 var stateByCountry = {
     USA: ["NY", "NJ"],
     Singapore: ["taas", "naas"]
 }
+//function to set country and state list
 function makeSubmenu(obj) {
     var value = obj.value;
     if (value.length == 0) {
@@ -16,10 +18,12 @@ function makeSubmenu(obj) {
         $("#stateSelect").html(statesOptions);
     }
 }
+//function to reset state list
 function resetSelection() {
     $("#countrySelect").selectedIndex = 0;
     $("#stateSelect").selectedIndex = 0;
 }
+
 $(document).ready(function () {
     resetSelection();
     $("#fname").on("blur", function (e) {
@@ -99,6 +103,7 @@ $(document).ready(function () {
     	return validateLoginForm();
     });
 });
+//function to validate login form
 function validateLoginForm(){
 	checkEmpty("#loginPassword");
 	if($("#loginForm").find(".errorMessage").length){
@@ -113,6 +118,7 @@ function validateLoginForm(){
         }
     }
 }
+//function to validate registration form
 function validateRegistrationForm(){
     if(checkEmpty("#fname")){
         validText("#fname");
@@ -165,7 +171,7 @@ function validateRegistrationForm(){
    
 }
 
-
+//function to check empty fields
 function checkEmpty(field){
 	
     if($(field).val().length > 0){
@@ -179,6 +185,7 @@ function checkEmpty(field){
         return false;
     }
 }
+//function to validate text fields
 function validText(text) {
     var fieldName = $(text).attr('name');
     var patt = /^[a-zA-Z][a-zA-Z\s]+$/;
@@ -197,6 +204,7 @@ function validText(text) {
     }
     
 }
+//function to validate phone number
 function validPhNo(number) {
     var length = $(number).val().length;
         var numbers = /^[0-9]+$/;
@@ -209,6 +217,7 @@ function validPhNo(number) {
         }
     
 }
+//function to validate password
 function validPassword(password) {
     var length = $(password).val().length;
         var pattern = /^\S+$/;
@@ -223,6 +232,7 @@ function validPassword(password) {
             return false;            
         }
 }
+//function to match two password fields
 function matchPassword(password,repassword){
     if($(password).val() != $(repassword).val()){
         $(password).css("border","1px solid #ff0000");
@@ -237,6 +247,7 @@ function matchPassword(password,repassword){
         $("#repasswordError").text("").removeClass("errorMessage");
     }
 }
+//function to validate date
 function validDate(date){
         var today = new Date();
         var day = today.getDate();
@@ -259,7 +270,7 @@ function validDate(date){
         }
        
 }
-
+//function to validate address
 function validAddress(address){
     var pattern = /^\w[\w\.\/\,\s\(\):-]+$/;
     if($(address).val().match(pattern))
@@ -273,6 +284,7 @@ function validAddress(address){
     $("#addressError").text("Address should contain only letters,numbers or (: / . () - ,)").addClass("errorMessage");
     }
 }
+//function to validate zip code
 function validZip(number) {
     var length = $(number).val().length;
     var numbers = /^[0-9]+$/;
@@ -287,6 +299,7 @@ function validZip(number) {
         }
     
 }
+//function to validate e-mail and send data
 function validMail(mail,dataStatus) {
     var patt = /^(\w[\w_.]+)@(\S)+\.([a-zA-Z]+)$/;
     if ($(mail).val().match(patt)) {
@@ -340,6 +353,7 @@ function validMail(mail,dataStatus) {
         $(mail + "Error").text("Enter a valid email !!").addClass("errorMessage");
     }
 }
+//function to call ajax for registration
 function sendData()
 {
 	var fname= $("#fname").val();
@@ -386,6 +400,7 @@ function sendData()
 		}
 	});
 }
+//function to call ajax to check if email id exists
 function checkMailExists(mail,callback)
 {
 	$.ajax({
@@ -402,6 +417,7 @@ function checkMailExists(mail,callback)
 		}
 	});
 }
+//function to call ajax to login
 function login(loginEmail,loginPassword,callback)
 {
 	$.ajax({

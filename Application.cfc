@@ -2,16 +2,16 @@
 
 
     <!--- Set up the application. --->
-    <cfset THIS.Name = "E_Commerce" />
+    <cfset THIS.Name = "E_Commeqweqwewqqweqweqweqeewqsdffdsgfdfghjkdfsdffgqweqwesdfasd" />
     <cfset THIS.ApplicationTimeout = CreateTimeSpan( 1, 0, 0, 0 ) />
     <cfset THIS.datasource = "ECommerce" />
-	<cfset THIS.sessionManagement="Yes" />
+	<cfset THIS.sessionManagement = "Yes" />
 
 
-
-    <cffunction name="OnApplicationStart" returntype="boolean">
+	 <!--- Set up the product component --->
+    <cffunction name = "OnApplicationStart" returntype = "boolean">
 		<cfset application.products = createObject(
-		"component","cfComponents.cfc.product")/>
+		"component","cfComponents.product")/>
         <cfreturn true />
     </cffunction>
 
