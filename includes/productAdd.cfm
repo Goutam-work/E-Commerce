@@ -5,14 +5,11 @@
 			<li><a  data-toggle="modal" href="#addProduct">Add Products</a></li>
 	          <li><a  data-toggle="modal" href="#addCategory">Add Category</a></li>
 	          <li><a  data-toggle="modal" href="#addSubCategory">Add Subcategory</a></li>
-	          <li class="dropdown">
-			        <a class="dropdown-toggle" data-toggle="dropdown" >Delete
-			        <span class="caret"></span></a>
-			        <ul class="dropdown-menu">
-			          <li><a href="#">category</a></li>
-			          <li><a href="#">sub category</a></li>
-			        </ul>
-			   </li>
+			  <select  id="statusSelect">
+			    <option value = "1">Active</option>
+			    <option value = "0">Inactive</option>
+			    <option value = "">All</option>
+			  </select>
 		    </ul>
 		</div>
 </nav>

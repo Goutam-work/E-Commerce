@@ -391,7 +391,8 @@ function sendData()
 		type:"POST",
 		datatype:"json",
 		success: function(){
-			$("#scrollable").html("<h1>Registration sucessfull !!</h1>");
+			$("#registrationSucessMessage").text("Registration sucessfull !!");
+			$("#registrationForm").get(0).reset();
 			return true;
 		},
 		error: function(){

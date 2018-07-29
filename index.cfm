@@ -6,22 +6,14 @@
 	</cfif>
 </cfif>
 <head>
-  <title>E-Commerce</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <link rel="stylesheet" href="css/style.css">
-
-
+  <cfinclude template="includes/head.cfm" />
 </head>
 
 <body>
 
-  <div class="jumbotron">
-    <div class="container text-center">
+  <div class="header">
       <h1>Online Store</h1>
       <p>Mission, Vission & Values</p>
-    </div>
   </div>
 
   <nav class="navbar navbar-inverse">
@@ -75,7 +67,7 @@
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">Register</h4>
       </div>
-      <div class="modal-body" id="scrollable">
+      <div class="modal-body scrollable">
         <cfinclude template="includes/registrationForm.cfm" />
       </div>
       <div class="modal-footer">
@@ -126,7 +118,7 @@
           <div class="item active">
             <img src="http://via.placeholder.com/350x150" alt="Chania" width="460" height="345">
             <div class="carousel-caption">
-              <h3>Chania</h3>
+              <h3>DIWALI OFFER !!</h3>
               <p>The atmosphere in Chania has a touch of Florence and Venice.</p>
             </div>
           </div>
@@ -134,7 +126,7 @@
           <div class="item">
             <img src="http://via.placeholder.com/350x150" alt="Chania" width="460" height="345">
             <div class="carousel-caption">
-              <h3>Chania</h3>
+              <h3>WINTER OFFER !!</h3>
               <p>The atmosphere in Chania has a touch of Florence and Venice.</p>
             </div>
           </div>
@@ -142,7 +134,7 @@
           <div class="item">
             <img src="http://via.placeholder.com/350x150" alt="Flower" width="460" height="345">
             <div class="carousel-caption">
-              <h3>Flowers</h3>
+              <h3>BIG BILLION DAY</h3>
               <p>Beautiful flowers in Kolymbari, Crete.</p>
             </div>
           </div>
@@ -172,13 +164,7 @@
   <br>
   <br>
 
-  <footer class="container-fluid text-center">
-    <p>Online Store Copyright</p>
-    <form class="form-inline">Get deals:
-      <input type="email" class="form-control" size="50" placeholder="Email Address">
-      <button type="button" class="btn btn-danger">Sign Up</button>
-    </form>
-  </footer>
+  <cfinclude template="includes/footer.cfm" />
 
 </body>
 

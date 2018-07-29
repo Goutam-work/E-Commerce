@@ -1,18 +1,21 @@
-
 <cfcomponent  output = "false" >
 	<!--- login function --->
 	<cffunction name = "login" access = "remote" returntype = "string" returnformat = "json" >
 		<cfargument name = "loginEmail" required = "true" >
 		<cfargument name = "loginPassword" required = "true" >
-		<cfquery name = "loginQuery" result = "countEmail">
+		<cftry>
+			<cfquery name = "loginQuery" result = "countEmail">
 	    	SELECT userID,firstName,Email,password,CASE userRole
 			WHEN 1 THEN 'admin'
 			ELSE 'user'
 			END AS role FROM users.user_details
 	    	WHERE Email = <cfqueryparam value = "#arguments.loginEmail#" cfsqltype = "cf_sql_varchar" />
 	    	AND password = <cfqueryparam value = "#arguments.loginPassword#" cfsqltype = "cf_sql_varchar" />;
-		</cfquery>
-
+			</cfquery>
+		<cfcatch>
+			<cfdump var = "loginQuerry error" />
+		</cfcatch>
+		</cftry>
 		<cfif #loginQuery.recordCount# >
 			<cflogin>
 				<cfloginuser name = "#loginQuery.firstName#" password = "#loginQuery.password#" roles = "#loginQuery.role#">

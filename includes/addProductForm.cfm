@@ -1,5 +1,5 @@
 
-<span id = "addProductSucessMessage" class = "sucessMessage">product added sucessfully !!</span>
+<span id = "addProductSucessMessage" class = "sucessMessage">product added sucessfully !!</span><hr>
 <form name = "addProductForm" id = "addProductForm">
 	<div class = "form-group">
               <label for ="productName">Name</label>

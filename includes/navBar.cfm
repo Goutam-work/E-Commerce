@@ -24,7 +24,7 @@
 		        </ul>
 		      </li>
 			</cfoutput>
-        </ul>
+        </ul class="nav navbar-nav navbar-right">
         <ul class="nav navbar-nav navbar-right">
 			<form class="navbar-form navbar-left" id="searchByNameForm">
 	      		<div class="form-group">

@@ -2,7 +2,7 @@
 
 
     <!--- Set up the application. --->
-    <cfset THIS.Name = "E_Commeqweqwewqqweqweqweqeewqsdffdsgfdfghjkdfsdffgqweqwesdfasd" />
+    <cfset THIS.Name = "E_Commeqweqwewqqweqweqweqeewqsdffdsgfdfghjkdfsdffgqweqwesdfasdasdkhadsdfasfssagfjhhgfhdfhsdftiqweadad" />
     <cfset THIS.ApplicationTimeout = CreateTimeSpan( 1, 0, 0, 0 ) />
     <cfset THIS.datasource = "ECommerce" />
 	<cfset THIS.sessionManagement = "Yes" />

@@ -1,3 +1,4 @@
+<span class="sucessMessage" id="registrationSucessMessage"></span>
 <form name="registration" id="registrationForm" method="POST">
           <div class="form-group">
             <label for="fname">First Name</label><span  id="fnameError" value="errorMessage"></span>

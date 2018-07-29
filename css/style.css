@@ -7,8 +7,11 @@
 
 /* Remove the jumbotron's default bottom margin */
 
-.jumbotron {
-  margin-bottom: 0;
+.header {
+  background-color:rgb(241, 241, 241);
+  text-align:center;
+  overflow: hidden;
+  padding: 20px 10px;
 }
 
 /* Add a gray background color and some padding to the footer */
@@ -27,17 +30,21 @@ footer {
 .sidenav {
       padding-top: 20px;
       background-color: #f2f2f2;
-      height: 100%;
+	  position:sticky;
+	  top: 0;
 }
     
 .errormessage{
   float: right;
   color:#ff0000;
 }
-#scrollable{
+.scrollable{
     height: 450px;
     overflow: auto;
 }
 .sucessMessage{
 	display:none;
+}
+#statusSelect{
+	margin : 15px;
 }
