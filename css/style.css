@@ -44,6 +44,7 @@ footer {
 }
 .sucessMessage{
 	display:none;
+	color:#66ff66;
 }
 #statusSelect{
 	margin : 15px;

@@ -3,6 +3,7 @@
 	<cffunction name = "login" access = "remote" returntype = "string" returnformat = "json" >
 		<cfargument name = "loginEmail" required = "true" >
 		<cfargument name = "loginPassword" required = "true" >
+		<cfset var passwordHash = application.hashPassword.hashPassword(#arguments.loginPassword#) />
 		<cftry>
 			<cfquery name = "loginQuery" result = "countEmail">
 	    	SELECT userID,firstName,Email,password,CASE userRole
@@ -10,10 +11,16 @@
 			ELSE 'user'
 			END AS role FROM users.user_details
 	    	WHERE Email = <cfqueryparam value = "#arguments.loginEmail#" cfsqltype = "cf_sql_varchar" />
-	    	AND password = <cfqueryparam value = "#arguments.loginPassword#" cfsqltype = "cf_sql_varchar" />;
+	    	AND password = <cfqueryparam value = "#passwordHash#" cfsqltype = "cf_sql_varchar" />;
 			</cfquery>
-		<cfcatch>
-			<cfdump var = "loginQuerry error" />
+		<cfcatch type="any">
+			<cfset type="#cfcatch.Type#" />
+			<cfset message="#cfcatch.cause.message#" />
+			<cflog type="Error"
+				file="ECommerce"
+				text="Exception error --
+				   	  Exception type: #type#
+					  Message: #message#" />
 		</cfcatch>
 		</cftry>
 		<cfif #loginQuery.recordCount# >

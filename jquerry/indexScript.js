@@ -188,7 +188,7 @@ function checkEmpty(field){
 //function to validate text fields
 function validText(text) {
     var fieldName = $(text).attr('name');
-    var patt = /^[a-zA-Z][a-zA-Z\s]+$/;
+    var patt = /^[a-zA-Z]+[a-zA-Z\s]*$/;
     if ($(text).val().match(patt)) {
             $(text).css("border", "1px solid rgb(11, 243, 116)");
             $(text + "Error").text("").removeClass("errorMessage");
@@ -301,10 +301,9 @@ function validZip(number) {
 }
 //function to validate e-mail and send data
 function validMail(mail,dataStatus) {
-    var patt = /^(\w[\w_.]+)@(\S)+\.([a-zA-Z]+)$/;
+    var patt = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
     if ($(mail).val().match(patt)) {
     	checkMailExists($(mail).val(),function(data){
-    		//console.log(data);
     		if(data == "true"){
     			if($(mail).attr('name') == "loginEmail"){
     				$(mail).css("border", "1px solid rgb(11, 243, 116)");

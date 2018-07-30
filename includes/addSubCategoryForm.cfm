@@ -10,11 +10,9 @@
     <div class = "form-group">
       <label for = "categoryList">Category</label>
       <select class = "form-control" id = "categoryList">
-
 			<cfoutput query = "variables.getCategoryQuery">
 				<option  value = "#categoryID#">#categoryName#</option>
 			</cfoutput>
-
       </select>
     </div>
 	<button type = "button" class = "btn btn-default btn-success btn-block" id = "addSubCategorySubmit"> Add</button>

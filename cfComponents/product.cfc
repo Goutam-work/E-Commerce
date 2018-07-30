@@ -10,8 +10,14 @@
 	    	<cfqueryparam value = "#arguments.addCategoryName#" cfsqltype = "cf_sql_varchar" />
 	    	);
 		</cfquery>
-		<cfcatch>
-			<cfdump var="add-category querry error" />
+		<cfcatch type = "any">
+			<cfset type="#cfcatch.Type#" />
+			<cfset message="#cfcatch.cause.message#" />
+			<cflog type="Error"
+				file="ECommerce"
+				text="Exception error --
+				   	  Exception type: #type#
+					  Message: #message#" />
 		</cfcatch>
 		</cftry>
 	</cffunction>
@@ -28,8 +34,14 @@
 	    	<cfqueryparam value = "#arguments.categoryId#" cfsqltype = "cf_sql_integer" />
 	    	);
 		</cfquery>
-		 <cfcatch>
-			 <cfdump var="add-subCategory querry error" />
+		 <cfcatch type = "any">
+			<cfset type="#cfcatch.Type#" />
+			<cfset message="#cfcatch.cause.message#" />
+			<cflog type="Error"
+				file="ECommerce"
+				text="Exception error --
+				   	  Exception type: #type#
+					  Message: #message#" />
 		 </cfcatch>
 		 </cftry>
 	</cffunction>
@@ -62,8 +74,14 @@
 	    	<cfqueryparam value = "1" cfsqltype = "cf_sql_bit"  />
 	    	);
 		</cfquery>
-		<cfcatch type="database">
-			<cfdump var = "add product error" />
+		<cfcatch type="any">
+			<cfset type="#cfcatch.Type#" />
+			<cfset message="#cfcatch.cause.message#" />
+			<cflog type="Error"
+				file="ECommerce"
+				text="Exception error --
+				   	  Exception type: #type#
+					  Message: #message#" />
 		</cfcatch>
 		</cftry>
 	</cffunction>
@@ -75,8 +93,14 @@
 		<cfquery name = "getCategoryQuery">
 	    	SELECT categoryID,categoryName FROM product.product_category;
 		</cfquery>
-		<cfcatch>
-			<cfdump var = "get category error" />
+		<cfcatch type = "any">
+			<cfset type="#cfcatch.Type#" />
+			<cfset message="#cfcatch.cause.message#" />
+			<cflog type="Error"
+				file="ECommerce"
+				text="Exception error --
+				   	  Exception type: #type#
+					  Message: #message#" />
 		</cfcatch>
 		</cftry>
 		<cfreturn getCategoryQuery />
@@ -91,8 +115,14 @@
   			INNER JOIN product.product_category AS C ON S.categoryID = C.categoryID
 			ORDER BY C.categoryID;
 		</cfquery>
-		<cfcatch>
-			<cfdump var = "get sub category error" />
+		<cfcatch type = "any">
+			<cfset type="#cfcatch.Type#" />
+			<cfset message="#cfcatch.cause.message#" />
+			<cflog type="Error"
+				file="ECommerce"
+				text="Exception error --
+				   	  Exception type: #type#
+					  Message: #message#" />
 		</cfcatch>
 		</cftry>
 		<cfreturn getSubCategoryQuery />
@@ -159,8 +189,14 @@
 	        <cfset obj.COLOUR = getProductQuery.color />
 	        <cfset arrayAppend(response, obj) />
 	    </cfloop>
-	    <cfcatch>
-			<cfdump var = "fetch product error" />
+	    <cfcatch type = "any">
+			<cfset type="#cfcatch.Type#" />
+			<cfset message="#cfcatch.cause.message#" />
+			<cflog type="Error"
+				file="ECommerce"
+				text="Exception error --
+				   	  Exception type: #type#
+					  Message: #message#" />
 		</cfcatch>
 		</cftry>
 		<cfreturn response />
@@ -189,8 +225,14 @@
 			    <cfset obj.SIZE = getProductDetailsQuery.size />
 			    <cfset obj.DESCRIPTION = getProductDetailsQuery.description />
 			    <cfset obj.STATUS = getProductDetailsQuery.status />
-		    <cfcatch>
-				<cfdump var = "product details error" />
+		    <cfcatch type = "any">
+				<cfset type="#cfcatch.Type#" />
+				<cfset message="#cfcatch.cause.message#" />
+				<cflog type="Error"
+					file="ECommerce"
+					text="Exception error --
+					   	  Exception type: #type#
+						  Message: #message#" />
 			</cfcatch>
 			</cftry>
 			<cfreturn obj />
@@ -228,7 +270,13 @@
 		    	WHERE productID = <cfqueryparam value = "#arguments.productID#" cfsqltype = "cf_sql_integer"  />;
 			</cfquery>
 		<cfcatch>
-			<cfdump var = "edit product error" />
+			<cfset type="#cfcatch.Type#" />
+			<cfset message="#cfcatch.cause.message#" />
+			<cflog type="Error"
+				file="ECommerce"
+				text="Exception error --
+				   	  Exception type: #type#
+					  Message: #message#" />
 		</cfcatch>
 		</cftry>
 	</cffunction>

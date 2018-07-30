@@ -14,6 +14,7 @@
 		<cfargument name="zip" required="true" >
 		<cfargument name="country"  required="true" >
 		<cfargument name="state" required="true" >
+		<cfset var passwordHash = application.hashPassword.hashPassword(#arguments.password#) />
 		<cftry>
 			<cfquery name="mailCheckQuery" result="countEmail">
 		    	SELECT CASE COUNT(userID)
@@ -39,16 +40,22 @@
 		    		<cfqueryparam value="#arguments.lname#" cfsqltype ="cf_sql_varchar" />,
 		    		<cfqueryparam value="#arguments.mail#" cfsqltype ="cf_sql_varchar" />,
 		    		<cfqueryparam value="#arguments.phone#" cfsqltype ="cf_sql_biginteger" />,
-		    		<cfqueryparam value="#arguments.password#" cfsqltype ="cf_sql_varchar" />,
+		    		<cfqueryparam value="#passwordHash#" cfsqltype ="cf_sql_varchar" />,
 		    		<cfqueryparam value="#arguments.dob#" cfsqltype = "cf_sql_date" />,
 		    		<cfqueryparam value="#arguments.gender#" cfsqltype = "cf_sql_varchar" />,
 		    		<cfqueryparam value="#addressID.IDENTITYCOL#" cfsqltype = "cf_sql_integer" />,
 		    		<cfqueryparam value="#mailCheckQuery.role#" cfsqltype = "cf_sql_bit" />,
-		    		<cfqueryparam value="0" cfsqltype = "cf_sql_bit" />
+		    		<cfqueryparam value="1" cfsqltype = "cf_sql_bit" />
 					);
 			</cfquery>
-			<cfcatch type="database">
-				<cfdump var="database-error" />
+			<cfcatch type="any">
+				<cfset type="#cfcatch.Type#" />
+				<cfset message="#cfcatch.cause.message#" />
+				<cflog type="Error"
+					file="ECommerce"
+					text="Exception error --
+				   	  	Exception type: #type#
+					  	Message: #message#" />
 			</cfcatch>
 		</cftry>
 	</cffunction>
