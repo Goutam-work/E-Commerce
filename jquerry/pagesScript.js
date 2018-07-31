@@ -76,13 +76,19 @@ $(document).ready(function () {
 	    	var productID = $(this).attr("data-productID");
 	    	getProductDetails(productID,fillEditProductForm);
 	    });
-	    $("#editProductForm").on("submit",function(e){
+	    $("#editProductSubmit").on("click",function(e){
 	    	e.preventDefault();
 	    	validateEditProductForm();
 	    });
-
+	    $("#generatePdf").on("click",function(e){
+	    	fetchProducts(openPdf);
+	    	
+	    });
 	});
-
+//function to open pdf
+function openPdf(){
+	window.open('pdf.cfm','_blank');
+}
 //function to fetch product details
 function getProductDetails(productID,callback){
 	$.ajax({
@@ -103,7 +109,6 @@ function getProductDetails(productID,callback){
 function fillEditProductForm(product){
 	var productDetails = $.parseJSON(product);
 	$("#editProductName").val(productDetails.NAME);
-	$("#editProductImage").val(productDetails.IMAGE);
 	$("#editSubCategoryList").val(productDetails.SUBCATEGORY);
 	$("#editProductQuantity").val(productDetails.QUANTITY);
 	$("#editProductPrice").val(productDetails.PRICE);
@@ -134,7 +139,7 @@ function fetchProducts(callback){
 			 minPrice : minPrice,
 			 size : size,
 			 colour : colour,
-			 status : status
+			 status : status,
 		},
 		type:"GET",
 		datatype:"json",
@@ -146,6 +151,7 @@ function fetchProducts(callback){
 }
 //function to show product
 function showProducts(products){
+
 	$("#searchOn").text(searchOn);
 	var productDetails = $.parseJSON(products);
 	var content = "";
@@ -156,21 +162,32 @@ function showProducts(products){
 	}
 	$.each(productDetails, function( key, value ) {
 		var divClass = "";
+		var image = "";
+		var quantity = "OUT OF STOCK";
+		if(value.IMAGE.length){
+			 image = "images/"+value.IMAGE;
+		}
+		else{
+			image = "https://placehold.it/150x80?text=IMAGE";
+		}
 		if(value.STATUS == "1"){
 			 divClass = "panel panel-primary";
 		}
 		else{
 			divClass = "panel panel-danger";
 		}
+		if(value.QUANTITY > 0){
+			quantity = "AVAILABLE";
+		}
 		   content += '<div class="col-sm-3 productEditPart" data-productID = "'+value.ID+'" '+attributes+' >\
 						         <div class="'+divClass+'">\
 							          <div class="panel-heading">' +value.NAME+ '</div>\
 							          <div class="panel-body">\
-						         		<img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image">\
+						         		<img src="'+image+'" class="img-responsive" style="width:100%;height:25%;" alt="Image">\
 		   							  </div>\
 							          <div class="panel-footer">\
+						         		'+quantity+'<br>\
 								      	price : Rs.' +value.PRICE+ '<br>\
-								      	Colour : ' +value.COLOUR+ '<br>\
 								      </div>\
 							</div>\
 						</div>'; 
@@ -194,6 +211,7 @@ function validateAddProductForm(){
 			addProduct(function(){
 				$("#addProductForm").get(0).reset();
 				$("#addProductSucessMessage").css("display","block");
+				fetchProducts(showProducts);
 		});		
 	}
 	
@@ -288,36 +306,17 @@ function addSubCategory(callback){
 //function to call ajax for adding products
 function addProduct(callback)
 {
-	var productName= $("#productName").val();
-	var productImage=$("#productImage").val();
-	var subCategory=$("#subCategoryList option:selected").val();
-	var productQuantity=$("#productQuantity").val();
-	var productPrice= $("#productPrice").val();
-	var discountDeduction= $("#discountDeduction").val();
-	var productColour=$("#productColour").val();
-	var productWeight= $("#productWeight").val();
-	var productSize=$("#productSize").val();
-	var productDescription= $("#productDescription").val();
-	
+	var formData = new FormData($("#addProductForm")[0]);
 	$.ajax({
-		 url:"cfComponents/product.cfc",
-		 data: {
-			 method : "addProduct",
-			 productName : productName,
-			 productImage :productImage ,
-			 subCategoryID : subCategory,
-			 productQuantity : productQuantity,
-			 productPrice : productPrice,
-			 discountDeduction : discountDeduction,
-			 productColour : productColour,
-			 productWeight : productWeight,
-			 productSize : productSize,
-			 productDescription : productDescription,
-		},
-		type:"POST",
-		datatype:"json",
-		success: callback,
-		error: function(){
+		 url:"cfComponents/product.cfc?method=addProduct",
+	     data: formData,
+	     enctype:"multipart/form-data",
+	     processData:false,
+	     contentType:false,
+	     type:"POST",
+	     datatype:"json",
+	     success: callback,
+	     error: function(){
 			console.log("add product ajax error");
 			return false;
 		}
@@ -337,26 +336,16 @@ function editProductDetails(){
 	var productSize=$("#editProductSize").val();
 	var productDescription= $("#editProductDescription").val();
 	var productStatus= $("input[name=editStatus]:checked").val();
+	var formData = new FormData($("#editProductForm")[0]);
 	$.ajax({
-		 url:"cfComponents/product.cfc",
-		 data: {
-			 method : "editProductDetails",
-			 productID : productID,
-			 productName : productName,
-			 productImage : productImage,
-			 subCategoryID : subCategoryID,
-			 productQuantity : productQuantity,
-			 productPrice : productPrice,
-			 discountDeduction : discountDeduction,
-			 productColour : productColour,
-			 productWeight : productWeight,
-			 productSize : productSize,
-			 productDescription : productDescription,
-			 productStatus : productStatus
-		},
-		type:"POST",
-		datatype:"json",
-		success: function(){
+		 url:"cfComponents/product.cfc?method=editProductDetails",
+		 data: formData,
+	     enctype:"multipart/form-data",
+	     processData:false,
+	     contentType:false,
+	     type:"POST",
+	     datatype:"json",
+	     success: function(){
 			$("#editProductSucessMessage").css("display","block");
 			fetchProducts(showProducts);
 		} ,

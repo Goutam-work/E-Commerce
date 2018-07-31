@@ -1,14 +1,14 @@
 <span id = "editProductSucessMessage" class = "sucessMessage">product edited sucessfully !!</span><hr>
 <form name = "editProductForm" id = "editProductForm">
+	<div class = "form-group">
+      <label for ="editProductImage">Change Image</label>
+	 	<span class ="errorMessage" id = "editProductImageError"></span>
+      <input type = "file" class = "form-control" id = "editProductImage" name = "editProductImage" placeholder = "product Image" >
+  </div>
   <div class="form-group">
     <label for="editProductName">Product Name:</label>
     <input type="text" class="form-control" name="editProductName" id="editProductName">
   </div>
-  <div class = "form-group">
-      <label for ="editProductImage">Image</label>
-	 <span class ="errorMessage" id = "editProductImageError"></span>
-      <input type = "text" class = "form-control" id = "editProductImage" name = "editProductImage" placeholder = "product Image" >
-    </div>
     <div class = "form-group">
       <label for = "editSubCategoryList">Sub Category</label>
       <select class = "form-control" id = "editSubCategoryList" name="editSubCategoryList">
@@ -47,7 +47,7 @@
     </div>
 	  <div class="form-group">
             <lable><b>Status</b></lable><br>
-            <label class="radio-inline"><input type="radio" name="editStatus"  value="1" checked>Active</label>
+            <label class="radio-inline"><input type="radio" name="editStatus"  value="1" >Active</label>
             <label class="radio-inline"><input type="radio" name="editStatus"  value="0">Inactive</label>
        </div>
 	<input type="hidden" id="editProductID" name="editProductID">

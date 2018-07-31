@@ -32,6 +32,7 @@
 	      		</div>
 	      		<button type="button" class="btn btn-default" id="searchByNameSubmit">Search</button>
 	 	  	 </form>
+	 	  <li><button type="button" name="generatePdf" class="btn btn-default" id="generatePdf">PDF</button></li>
           <li><a href="#" id="logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
         </ul>
       </div>

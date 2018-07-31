@@ -49,3 +49,12 @@ footer {
 #statusSelect{
 	margin : 15px;
 }
+#generatePdf{
+	margin : 8px;
+}
+#pdfTable{
+	width:100%;
+	text-align:center;
+	border:2px solid black;
+	border-collapse:collapse;
+}

@@ -47,34 +47,31 @@
 	</cffunction>
 
 	<!--- function to add Product --->
-	<cffunction name = "addProduct" access = "remote" output = "false" >
-		<cfargument name = "productName" required = "true" >
-		<cfargument name = "productImage" required = "false" >
-		<cfargument name = "subCategoryID" required = "true">
-		<cfargument name = "productQuantity" required = "true" >
-		<cfargument name = "productPrice" required = "true" >
-		<cfargument name = "discountDeduction" required = "false" default = 0 >
-		<cfargument name = "productColour" required = "false" >
-		<cfargument name = "productWeight" required = "false" default = 0 >
-		<cfargument name = "productSize" required = "false" >
-		<cfargument name = "productDescription" required = "false" >
+	<cffunction name = "addProduct" access = "remote" output = "true" >
 		<cftry>
-		<cfquery name="addProductquery">
-	    	INSERT INTO product.product VALUES(
-	    	<cfqueryparam value = "#arguments.productName#" cfsqltype = "cf_sql_varchar" />,
-	    	<cfqueryparam value = "#arguments.productImage#" cfsqltype = "cf_sql_varchar" null = "#not len(arguments.productImage)#" />,
-	    	<cfqueryparam value = "#arguments.subCategoryID#" cfsqltype = "cf_sql_integer" />,
-	    	<cfqueryparam value = "#arguments.productQuantity#" cfsqltype = "cf_sql_integer" />,
-	    	<cfqueryparam value = "#arguments.productPrice#" cfsqltype = "cf_sql_float" />,
-	    	<cfqueryparam value = "#arguments.discountDeduction#" cfsqltype = "cf_sql_float" null = "#not len(arguments.discountDeduction)#" />,
-	    	<cfqueryparam value = "#arguments.productColour#" cfsqltype = "cf_sql_varchar" null = "#not len(arguments.productColour)#" />,
-	    	<cfqueryparam value = "#arguments.productWeight#" cfsqltype = "cf_sql_float" null = "#not len(arguments.productWeight)#" />,
-	    	<cfqueryparam value = "#arguments.productSize#" cfsqltype = "cf_sql_varchar" null = "#not len(arguments.productSize)#" />,
-	    	<cfqueryparam value = "#arguments.productDescription#" cfsqltype = "cf_sql_varchar" null = "#not len(arguments.productDescription)#" />,
+		<cfquery name="addProductquery" result="addedProduct">
+	    	INSERT INTO product.product(productName,subCategoryID,quantity,actualPrice,discountDeduction,color,weight,size,description,status)
+	    	 VALUES(
+	    	<cfqueryparam value = "#form.productName#" cfsqltype = "cf_sql_varchar" />,
+	    	<cfqueryparam value = "#form.subCategory#" cfsqltype = "cf_sql_integer" />,
+	    	<cfqueryparam value = "#form.productQuantity#" cfsqltype = "cf_sql_integer" />,
+	    	<cfqueryparam value = "#form.productPrice#" cfsqltype = "cf_sql_float" />,
+	    	<cfqueryparam value = "#form.discountDeduction#" cfsqltype = "cf_sql_float" null = "#not len(form.discountDeduction)#" />,
+	    	<cfqueryparam value = "#form.productColour#" cfsqltype = "cf_sql_varchar" null = "#not len(form.productColour)#" />,
+	    	<cfqueryparam value = "#form.productWeight#" cfsqltype = "cf_sql_float" null = "#not len(form.productWeight)#" />,
+	    	<cfqueryparam value = "#form.productSize#" cfsqltype = "cf_sql_varchar" null = "#not len(form.productSize)#" />,
+	    	<cfqueryparam value = "#form.productDescription#" cfsqltype = "cf_sql_varchar" null = "#not len(form.productDescription)#" />,
 	    	<cfqueryparam value = "1" cfsqltype = "cf_sql_bit"  />
 	    	);
 		</cfquery>
+		<cfif isDefined("form.productImage") AND len(form.productImage) >
+			<cfset var fileName = "#addedProduct.IDENTITYCOL#">
+			<cfset var destination="D:\eclipse\RemoteSystemsTempFiles\ECommerce\images\#fileName#.jpg">
+			<cffile action="upload" filefield="productImage" destination="#destination#" nameconflict="makeunique" result="upload_result" accept="image/*">
+			<cfset result = application.products.addPicture(#fileName#)/>
+		</cfif>
 		<cfcatch type="any">
+			<cfdump var="#cfcatch#">
 			<cfset type="#cfcatch.Type#" />
 			<cfset message="#cfcatch.cause.message#" />
 			<cflog type="Error"
@@ -145,7 +142,7 @@
 	</cffunction>
 
 	 <!--- function to return products --->
-		<cffunction name = "getProducts" access = "remote" output = "false"  returnformat="json" >
+	<cffunction name = "getProducts" access = "remote" output = "false"  returnformat="json" >
 		<cfargument name = "subCategoryID" required = "true">
 		<cfargument name = "productName" required = "true">
 		<cfargument name = "maxPrice" required = "true">
@@ -157,7 +154,7 @@
 		<cfset getProductQuery = "">
 		<cftry>
 		<cfquery name = "getProductQuery">
-	    	SELECT productID,productName,productImage,actualPrice,color,status FROM product.product
+	    	SELECT productID,productName,productImage,quantity,actualPrice,status FROM product.product
 	    	WHERE actualPrice BETWEEN
 									<cfqueryparam value = "#arguments.minPrice#" cfsqltype = "cf_sql_integer" />
 									AND
@@ -186,7 +183,7 @@
 	        <cfset obj.PRICE = getProductQuery.actualPrice />
 	        <cfset obj.STATUS = getProductQuery.status />
 	        <cfset obj.IMAGE = getProductQuery.productImage />
-	        <cfset obj.COLOUR = getProductQuery.color />
+	        <cfset obj.QUANTITY = getProductQuery.quantity />
 	        <cfset arrayAppend(response, obj) />
 	    </cfloop>
 	    <cfcatch type = "any">
@@ -199,11 +196,22 @@
 					  Message: #message#" />
 		</cfcatch>
 		</cftry>
+			<cfset session.subCategoryID = arguments.subCategoryID />
+			<cfset session.productName = arguments.productName />
+			<cfset session.maxPrice = arguments.maxPrice />
+			<cfset session.minPrice = arguments.minPrice />
+			<cfset session.size = arguments.size />
+			<cfset session.colour = arguments.colour />
+			<cfset session.status = arguments.status />
 		<cfreturn response />
 	</cffunction>
 
+	<!--- function to call return products --->
+	<cffunction name = "getProductsForPdf" access = "public" output = "false"  returnformat="json" >
+			<cfreturn getProducts()>
+	</cffunction>
 	<!--- function to return product details --->
-		<cffunction name = "getProductDetails" access = "remote" output = "false"  returnformat="json" >
+	<cffunction name = "getProductDetails" access = "remote" output = "false"  returnformat="json" >
 			<cfargument name = "productID" required = "true">
 	 		<cfset getProductDetailsQuery = "">
 	 		<cfset obj = structNew()>
@@ -240,43 +248,54 @@
 
 	<!--- function to edit Product --->
 	<cffunction name = "editProductDetails" access = "remote" output = "false" >
- 		<cfargument name = "productID" required = "true" />
-		<cfargument name = "productName" required = "true" />
-		<cfargument name = "productImage" required = "false" />
-		<cfargument name = "subCategoryID" required = "true" />
-		<cfargument name = "productQuantity" required = "true" />
-		<cfargument name = "productPrice" required = "true" />
-		<cfargument name = "discountDeduction" required = "false" default = 0 />
-		<cfargument name = "productColour" required = "false" />
-		<cfargument name = "productWeight" required = "false" default = 0 />
-		<cfargument name = "productSize" required = "false" />
-		<cfargument name = "productDescription" required = "false" />
-		<cfargument name = "productStatus" required = "true" />
 		<cfset editProductquery="" />
+		<cfset var fileName = "#form.editProductID#">
+		<cfset var destination="D:\eclipse\RemoteSystemsTempFiles\ECommerce\images\#fileName#.jpg">
 		<cftry>
 			<cfquery name="editProductquery">
 		    	UPDATE product.product SET
-		    	productName = <cfqueryparam value = "#arguments.productName#" cfsqltype = "cf_sql_varchar" />,
-		    	productImage = <cfqueryparam value = "#arguments.productImage#" cfsqltype = "cf_sql_varchar" null = "#not len(arguments.productImage)#" />,
-		    	subCategoryID = <cfqueryparam value = "#arguments.subCategoryID#" cfsqltype = "cf_sql_integer" />,
-		    	quantity = <cfqueryparam value = "#arguments.productQuantity#" cfsqltype = "cf_sql_integer" />,
-		    	actualPrice = <cfqueryparam value = "#arguments.productPrice#" cfsqltype = "cf_sql_float" />,
-		    	discountDeduction = <cfqueryparam value = "#arguments.discountDeduction#" cfsqltype = "cf_sql_float" null = "#not len(arguments.discountDeduction)#" />,
-		    	color = <cfqueryparam value = "#arguments.productColour#" cfsqltype = "cf_sql_varchar" null = "#not len(arguments.productColour)#" />,
-		    	weight = <cfqueryparam value = "#arguments.productWeight#" cfsqltype = "cf_sql_float" null = "#not len(arguments.productWeight)#" />,
-		    	size = <cfqueryparam value = "#arguments.productSize#" cfsqltype = "cf_sql_varchar" null = "#not len(arguments.productSize)#" />,
-		    	description = <cfqueryparam value = "#arguments.productDescription#" cfsqltype = "cf_sql_varchar" null = "#not len(arguments.productDescription)#" />,
-		    	status = <cfqueryparam value = "#arguments.productStatus#" cfsqltype = "cf_sql_bit"  />
-		    	WHERE productID = <cfqueryparam value = "#arguments.productID#" cfsqltype = "cf_sql_integer"  />;
+		    	productName = <cfqueryparam value = "#form.editProductName#" cfsqltype = "cf_sql_varchar" />,
+		    	subCategoryID = <cfqueryparam value = "#form.editSubCategoryList#" cfsqltype = "cf_sql_integer" />,
+		    	quantity = <cfqueryparam value = "#form.editProductQuantity#" cfsqltype = "cf_sql_integer" />,
+		    	actualPrice = <cfqueryparam value = "#form.editProductPrice#" cfsqltype = "cf_sql_float" />,
+		    	discountDeduction = <cfqueryparam value = "#form.editDiscountDeduction#" cfsqltype = "cf_sql_float" null = "#not len(form.editDiscountDeduction)#" />,
+		    	color = <cfqueryparam value = "#form.editProductColour#" cfsqltype = "cf_sql_varchar" null = "#not len(form.editProductColour)#" />,
+		    	weight = <cfqueryparam value = "#form.editProductWeight#" cfsqltype = "cf_sql_float" null = "#not len(form.editProductWeight)#" />,
+		    	size = <cfqueryparam value = "#form.editProductSize#" cfsqltype = "cf_sql_varchar" null = "#not len(form.editProductSize)#" />,
+		    	description = <cfqueryparam value = "#form.editProductDescription#" cfsqltype = "cf_sql_varchar" null = "#not len(form.editProductDescription)#" />,
+		    	status = <cfqueryparam value = "#form.editStatus#" cfsqltype = "cf_sql_bit"  />
+		    	WHERE productID = <cfqueryparam value = "#form.editProductID#" cfsqltype = "cf_sql_integer"  />;
+			</cfquery>
+			<cfif isDefined("form.editProductImage") AND len(form.editProductImage) >
+				<cffile action="upload" filefield="editProductImage" destination="#destination#" nameconflict="overwrite" result="upload_result" accept="image/*">
+				<cfset result = application.products.addPicture(#fileName#)/>
+			</cfif>
+		<cfcatch>
+			<cfset var details = "#cfcatch.type#">
+				<cflog type="Error"
+					file="ECommerce"
+					text="Exception error ---
+						  type : #details#" />
+		</cfcatch>
+		</cftry>
+	</cffunction>
+
+	<!--- function to add product image --->
+	<cffunction name="addPicture" acess="public" output="false">
+		<cfargument name = "productID" required = "true" />
+		<cftry>
+			<cfquery name="addProductImagequery">
+				UPDATE product.product SET
+				productImage = <cfqueryparam value="#arguments.productID#.jpg" cfsqltype = "cf_sql_varchar">
+				WHERE productID = <cfqueryparam value = "#arguments.productID#" cfsqltype = "cf_sql_integer"  />;
 			</cfquery>
 		<cfcatch>
 			<cfset type="#cfcatch.Type#" />
-			<cfset message="#cfcatch.cause.message#" />
+			<!--- <cfset message="#cfcatch.cause.message#" /> --->
 			<cflog type="Error"
 				file="ECommerce"
 				text="Exception error --
-				   	  Exception type: #type#
-					  Message: #message#" />
+				   	  Exception type: #type# " />
 		</cfcatch>
 		</cftry>
 	</cffunction>

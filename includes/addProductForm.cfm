@@ -1,19 +1,18 @@
-
 <span id = "addProductSucessMessage" class = "sucessMessage">product added sucessfully !!</span><hr>
 <form name = "addProductForm" id = "addProductForm">
+	<div class = "form-group">
+           <label for ="productImage">Image</label>
+			<span class ="errorMessage" id = "productImageError"></span>
+           <input type = "file" class = "form-control" id = "productImage" name = "productImage" >
+    </div>
 	<div class = "form-group">
               <label for ="productName">Name</label>
 				<span class = "errorMessage" id = "productNameError"></span>
               <input type = "text" class = "form-control" id = "productName" name = "productName" placeholder = "product name" required>
     </div>
-	<div class = "form-group">
-              <label for ="productImage">Image</label>
-				<span class ="errorMessage" id = "productImageError"></span>
-              <input type = "text" class = "form-control" id = "productImage" name = "productImage" placeholder = "product Image" required>
-    </div>
     <div class = "form-group">
       <label for = "subCategoryList">Sub Category</label>
-      <select class = "form-control" id = "subCategoryList">
+      <select class = "form-control" name="subCategory" id = "subCategoryList">
 
 			<cfoutput query = "variables.getSubCategoryQuery">
 				<option  value = "#subCategoryID#">#categoryName#-#subCategoryName#</option>
