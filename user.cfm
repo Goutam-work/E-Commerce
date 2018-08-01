@@ -11,7 +11,9 @@
 	<div class="row content">
 		<cfinclude template="includes/productFilter.cfm" />
 	  	<div class="col-sm-9 container-fluid">
-			<p>search results for "<span id="searchOn"></span>" sub-categories<hr></p>
+			search results for "<span id="searchOn"></span>" sub-categories
+			<button type="button" name="generatePdf" class="btn btn-default" id="generatePdf">PDF</button>
+			<hr>
 			<div class="row" id="productDisplay"></div>
 		</div>
 	</div>

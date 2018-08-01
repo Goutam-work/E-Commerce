@@ -1,4 +1,3 @@
-<span id="addCategorySucessMessage" class="sucessMessage">category added sucessfully !!</span><hr>
 <span id="addCategoryNameError" class="errorMessage"></span>
 <form class="form-inline" id="addCategory">
   <div class="form-group">

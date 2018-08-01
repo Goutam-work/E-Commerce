@@ -28,7 +28,7 @@
 				<cfloginuser name = "#loginQuery.firstName#" password = "#loginQuery.password#" roles = "#loginQuery.role#">
 			</cflogin>
 			<cfset session.loggedInUser = {'userId' = "#loginQuery.userID#" ,
-			'userName' = "#loginQuery.firstName#", 'Email' = "#loginQuery.Email#"  } />
+			'userName' = "#loginQuery.firstName#", 'Email' = "#loginQuery.Email#" ,'role' = "#loginQuery.role#" } />
 			<cfreturn #loginQuery.role# />
 		<cfelse>
 			<cfreturn false />

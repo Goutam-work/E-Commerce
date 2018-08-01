@@ -1,4 +1,3 @@
-
 <nav class="navbar navbar-inverse">
 	  <div class="container-fluid">
 		    <ul class="nav navbar-nav">
@@ -11,5 +10,8 @@
 			    <option value = "">All</option>
 			  </select>
 		    </ul>
+		    <ul class="nav navbar-nav navbar-right">
+				<button type="button" name="generatePdf" class="btn btn-default" id="generatePdf">PDF</button>
+			</ul>
 		</div>
 </nav>

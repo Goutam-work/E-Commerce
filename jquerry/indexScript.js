@@ -390,7 +390,7 @@ function sendData()
 		type:"POST",
 		datatype:"json",
 		success: function(){
-			$("#registrationSucessMessage").text("Registration sucessfull !!");
+			$("#registrationSucessMessage").css("display","block");
 			$("#registrationForm").get(0).reset();
 			return true;
 		},

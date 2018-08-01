@@ -1,4 +1,3 @@
-<span id = "editProductSucessMessage" class = "sucessMessage">product edited sucessfully !!</span><hr>
 <form name = "editProductForm" id = "editProductForm">
 	<div class = "form-group">
       <label for ="editProductImage">Change Image</label>
@@ -51,6 +50,5 @@
             <label class="radio-inline"><input type="radio" name="editStatus"  value="0">Inactive</label>
        </div>
 	<input type="hidden" id="editProductID" name="editProductID">
-	<button type = "submit" class = "btn btn-default btn-success btn-block" id = "editProductSubmit">Edit</button>
 </form>
 

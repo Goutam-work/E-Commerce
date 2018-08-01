@@ -52,12 +52,12 @@ $(document).ready(function () {
 	    });
 	    $(".subCategoryList").on("click",function(e){
 	    	subCategorySearchID = $(this).attr("data-subCategoryID");
-	    	searchOn=$(this).html();
+	    	searchOn = $(this).html();
 	    	fetchProducts(showProducts);
 	    });
 	    $("#showAll").on("click",function(e){
 	    	subCategorySearchID = "";
-	    	searchOn="All";
+	    	searchOn = "All";
 	    	fetchProducts(showProducts);
 	    });
 	    $("#searchByNameSubmit").on("click",function(e){
@@ -73,6 +73,7 @@ $(document).ready(function () {
 	    	fetchProducts(showProducts);
 	    });
 	    $(".productDetail").on("click","div.productEditPart",function(){
+	    	$("#editProductSucessMessage").css("display","none");
 	    	var productID = $(this).attr("data-productID");
 	    	getProductDetails(productID,fillEditProductForm);
 	    });
@@ -209,8 +210,8 @@ function validateAddProductForm(){
 
 	if(condition){
 			addProduct(function(){
-				$("#addProductForm").get(0).reset();
 				$("#addProductSucessMessage").css("display","block");
+				$("#addProductForm").get(0).reset();
 				fetchProducts(showProducts);
 		});		
 	}
@@ -324,18 +325,6 @@ function addProduct(callback)
 }
 //function to edit product details
 function editProductDetails(){
-	var productID= $("#editProductID").val();
-	var productName= $("#editProductName").val();
-	var productImage=$("#editProductImage").val();
-	var subCategoryID=$("#editSubCategoryList option:selected").val();
-	var productQuantity=$("#editProductQuantity").val();
-	var productPrice= $("#editProductPrice").val();
-	var discountDeduction= $("#editDiscountDeduction").val();
-	var productColour=$("#editProductColour").val();
-	var productWeight= $("#editProductWeight").val();
-	var productSize=$("#editProductSize").val();
-	var productDescription= $("#editProductDescription").val();
-	var productStatus= $("input[name=editStatus]:checked").val();
 	var formData = new FormData($("#editProductForm")[0]);
 	$.ajax({
 		 url:"cfComponents/product.cfc?method=editProductDetails",
