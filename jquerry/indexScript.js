@@ -310,7 +310,6 @@ function validMail(mail,dataStatus) {
     	            $(mail + "Error").text("").removeClass("errorMessage");
     				if(dataStatus=="login"){
     	            	login($(mail).val(),$("#loginPassword").val(),function(data){
-    	            		console.log(data);
     	            		if(data=='"user"'){
     	            			 window.open('user.cfm','_self');
     	            		}

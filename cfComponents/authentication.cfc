@@ -15,12 +15,10 @@
 			</cfquery>
 		<cfcatch type="any">
 			<cfset type="#cfcatch.Type#" />
-			<cfset message="#cfcatch.cause.message#" />
 			<cflog type="Error"
 				file="ECommerce"
 				text="Exception error --
-				   	  Exception type: #type#
-					  Message: #message#" />
+				   	  Exception type: #type#" />
 		</cfcatch>
 		</cftry>
 		<cfif #loginQuery.recordCount# >

@@ -83,7 +83,7 @@ $(document).ready(function () {
 	    });
 	    $("#generatePdf").on("click",function(e){
 	    	window.open('pdf.cfm','_blank');
-	    	
+	    
 	    });
 	});
 //function to fetch product details

@@ -15,12 +15,10 @@
 			</cfif>
 				<cfcatch type = "any">
 					<cfset type="#cfcatch.Type#" />
-					<cfset message="#cfcatch.cause.message#" />
 					<cflog type="Error"
 						file="ECommerce"
 						text="Exception error --
-						   	  Exception type: #type#
-							  Message: #message#" />
+						   	  Exception type: #type#" />
 				</cfcatch>
 		</cftry>
 	</cffunction>
@@ -41,18 +39,16 @@
 			</cfif>
 				 <cfcatch type = "any">
 					<cfset type="#cfcatch.Type#" />
-					<cfset message="#cfcatch.cause.message#" />
 					<cflog type="Error"
 						file="ECommerce"
 						text="Exception error --
-						   	  Exception type: #type#
-							  Message: #message#" />
+						   	  Exception type: #type#" />
 				 </cfcatch>
 		</cftry>
 	</cffunction>
 
 	<!--- function to add Product --->
-	<cffunction name = "addProduct" access = "remote" output = "true" >
+	<cffunction name = "addProduct" access = "remote" output = "false" >
 		<cftry>
 		<cfif session.loggedInUser.role EQ "admin">
 			<cfquery name="addProductquery" result="addedProduct">
@@ -96,12 +92,10 @@
 		</cfquery>
 		<cfcatch type = "any">
 			<cfset type="#cfcatch.Type#" />
-			<cfset message="#cfcatch.cause.message#" />
 			<cflog type="Error"
 				file="ECommerce"
 				text="Exception error --
-				   	  Exception type: #type#
-					  Message: #message#" />
+				   	  Exception type: #type#" />
 		</cfcatch>
 		</cftry>
 		<cfreturn getCategoryQuery />
@@ -118,12 +112,10 @@
 		</cfquery>
 		<cfcatch type = "any">
 			<cfset type="#cfcatch.Type#" />
-			<cfset message="#cfcatch.cause.message#" />
 			<cflog type="Error"
 				file="ECommerce"
 				text="Exception error --
-				   	  Exception type: #type#
-					  Message: #message#" />
+				   	  Exception type: #type#" />
 		</cfcatch>
 		</cftry>
 		<cfreturn getSubCategoryQuery />
@@ -178,12 +170,10 @@
 	    </cfloop>
 	    <cfcatch type = "any">
 			<cfset type="#cfcatch.Type#" />
-			<cfset message="#cfcatch.cause.message#" />
 			<cflog type="Error"
 				file="ECommerce"
 				text="Exception error --
-				   	  Exception type: #type#
-					  Message: #message#" />
+				   	  Exception type: #type#" />
 		</cfcatch>
 		</cftry>
 			<cfset session.subCategoryID = arguments.subCategoryID />
@@ -223,12 +213,10 @@
 				</cfif>
 			    <cfcatch type = "any">
 					<cfset type="#cfcatch.Type#" />
-					<cfset message="#cfcatch.cause.message#" />
 					<cflog type="Error"
 						file="ECommerce"
 						text="Exception error --
-						   	  Exception type: #type#
-							  Message: #message#" />
+						   	  Exception type: #type#" />
 				</cfcatch>
 			</cftry>
 			<cfreturn obj />
@@ -271,7 +259,7 @@
 	</cffunction>
 
 	<!--- function to add product image --->
-	<cffunction name="addPicture" acess="public" output="false">
+	<cffunction name="addPicture" acess="public" output="false" >
 		<cfargument name = "productID" required = "true" />
 		<cftry>
 			<cfif session.loggedInUser.role EQ "admin">

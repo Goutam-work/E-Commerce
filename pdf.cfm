@@ -5,7 +5,8 @@
      <title>PDF</title>
 </head>
 <body>
-<cfset variables.result = application.products.getProducts(#session.subCategoryID#,#session.productName#,#session.maxPrice#,#session.minPrice#,#session.size#,#session.colour#,#session.status#) />
+<cfset variables.result = application.products.getProducts(#session.subCategoryID#,
+#session.productName#,#session.maxPrice#,#session.minPrice#,#session.size#,#session.colour#,#session.status#) />
 <cfdocument format="PDF">
    <table id="pdfTable" style="width:100%;text-align:center;border: 1px solid black;">
 	<tr>
