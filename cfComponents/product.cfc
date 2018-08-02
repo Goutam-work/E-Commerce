@@ -5,56 +5,56 @@
 	<cffunction name = "addCategory" access = "remote" output = "false" >
 		<cfargument name = "addCategoryName" required = "true" >
 		<cfset addCategoryQuerry = "" />
-		<cfif session.loggedInUser.role EQ "admin">
-			<cftry>
-			<cfquery name = "addCategoryquery">
-		    	INSERT INTO product.product_category VALUES(
-		    	<cfqueryparam value = "#arguments.addCategoryName#" cfsqltype = "cf_sql_varchar" />
-		    	);
-			</cfquery>
-			<cfcatch type = "any">
-				<cfset type="#cfcatch.Type#" />
-				<cfset message="#cfcatch.cause.message#" />
-				<cflog type="Error"
-					file="ECommerce"
-					text="Exception error --
-					   	  Exception type: #type#
-						  Message: #message#" />
-			</cfcatch>
-			</cftry>
-		</cfif>
+		<cftry>
+			<cfif session.loggedInUser.role EQ "admin">
+				<cfquery name = "addCategoryquery">
+			    	INSERT INTO product.product_category VALUES(
+			    	<cfqueryparam value = "#arguments.addCategoryName#" cfsqltype = "cf_sql_varchar" />
+			    	);
+				</cfquery>
+			</cfif>
+				<cfcatch type = "any">
+					<cfset type="#cfcatch.Type#" />
+					<cfset message="#cfcatch.cause.message#" />
+					<cflog type="Error"
+						file="ECommerce"
+						text="Exception error --
+						   	  Exception type: #type#
+							  Message: #message#" />
+				</cfcatch>
+		</cftry>
 	</cffunction>
 
 	<!--- function to add sub category --->
 	<cffunction name = "addSubCategory" access = "remote" output = "false" >
 		<cfargument name = "subCategoryName" required = "true" >
 		<cfargument name = "categoryId" required = "true" >
-		<cfif session.loggedInUser.role EQ "admin">
-			 <cftry>
-			<cfquery name = "addSubCategoryquery">
-		    	INSERT INTO product.product_subCategory VALUES
-		    	(
-		    	<cfqueryparam value = "#arguments.subCategoryName#" cfsqltype = "cf_sql_varchar" />,
-		    	<cfqueryparam value = "#arguments.categoryId#" cfsqltype = "cf_sql_integer" />
-		    	);
-			</cfquery>
-			 <cfcatch type = "any">
-				<cfset type="#cfcatch.Type#" />
-				<cfset message="#cfcatch.cause.message#" />
-				<cflog type="Error"
-					file="ECommerce"
-					text="Exception error --
-					   	  Exception type: #type#
-						  Message: #message#" />
-			 </cfcatch>
-			 </cftry>
-		</cfif>
+		<cftry>
+			<cfif session.loggedInUser.role EQ "admin">
+				<cfquery name = "addSubCategoryquery">
+			    	INSERT INTO product.product_subCategory VALUES
+			    	(
+			    	<cfqueryparam value = "#arguments.subCategoryName#" cfsqltype = "cf_sql_varchar" />,
+			    	<cfqueryparam value = "#arguments.categoryId#" cfsqltype = "cf_sql_integer" />
+			    	);
+				</cfquery>
+			</cfif>
+				 <cfcatch type = "any">
+					<cfset type="#cfcatch.Type#" />
+					<cfset message="#cfcatch.cause.message#" />
+					<cflog type="Error"
+						file="ECommerce"
+						text="Exception error --
+						   	  Exception type: #type#
+							  Message: #message#" />
+				 </cfcatch>
+		</cftry>
 	</cffunction>
 
 	<!--- function to add Product --->
 	<cffunction name = "addProduct" access = "remote" output = "true" >
+		<cftry>
 		<cfif session.loggedInUser.role EQ "admin">
-			<cftry>
 			<cfquery name="addProductquery" result="addedProduct">
 		    	INSERT INTO product.product(productName,subCategoryID,quantity,actualPrice,discountDeduction,color,weight,size,description,status)
 		    	 VALUES(
@@ -72,22 +72,19 @@
 			</cfquery>
 			<cfif isDefined("form.productImage") AND len(form.productImage) >
 				<cfset var fileName = "#addedProduct.IDENTITYCOL#">
-				<cfset var destination="D:\eclipse\RemoteSystemsTempFiles\ECommerce\images\#fileName#.jpg">
+				<cfset var destination= (getDirectoryFromPath( getCurrentTemplatePath() ) &"..\images\product images\#fileName#.jpg")>
 				<cffile action="upload" filefield="productImage" destination="#destination#" nameconflict="makeunique" result="upload_result" accept="image/*">
 				<cfset result = application.products.addPicture(#fileName#)/>
 			</cfif>
+		</cfif>
 			<cfcatch type="any">
-				<cfdump var="#cfcatch#">
 				<cfset type="#cfcatch.Type#" />
-				<cfset message="#cfcatch.cause.message#" />
 				<cflog type="Error"
 					file="ECommerce"
 					text="Exception error --
-					   	  Exception type: #type#
-						  Message: #message#" />
+					   	  Exception type: #type# "/>
 			</cfcatch>
-			</cftry>
-		</cfif>
+		</cftry>
 	</cffunction>
 
 	<!--- function to get category --->
@@ -134,13 +131,13 @@
 
 	 <!--- function to return products --->
 	<cffunction name = "getProducts" access = "remote" output = "false"  returnformat="json" >
-		<cfargument name = "subCategoryID" required = "true">
-		<cfargument name = "productName" required = "true">
-		<cfargument name = "maxPrice" required = "true">
-		<cfargument name = "minPrice" required = "true">
+		<cfargument name = "subCategoryID" required = "false">
+		<cfargument name = "productName" required = "false">
+		<cfargument name = "maxPrice" required = "false">
+		<cfargument name = "minPrice" required = "false">
 		<cfargument name = "size" required = "false">
 		<cfargument name = "colour" required = "false">
-		<cfargument name = "status" required = "true">
+		<cfargument name = "status" required = "false">
 		<cfset response = [] />
 		<cfset getProductQuery = "">
 		<cftry>
@@ -204,8 +201,8 @@
 			<cfargument name = "productID" required = "true">
 	 		<cfset getProductDetailsQuery = "">
 	 		<cfset obj = structNew()>
-	 		<cfif session.loggedInUser.role EQ "admin">
-		 		<cftry>
+		 	<cftry>
+			 	<cfif session.loggedInUser.role EQ "admin">
 					<cfquery name = "getProductDetailsQuery">
 				    	SELECT productID,productName,productImage,subCategoryID,
 				    	quantity,actualPrice,discountDeduction,color,weight,size,description,status FROM product.product
@@ -223,6 +220,7 @@
 				    <cfset obj.SIZE = getProductDetailsQuery.size />
 				    <cfset obj.DESCRIPTION = getProductDetailsQuery.description />
 				    <cfset obj.STATUS = getProductDetailsQuery.status />
+				</cfif>
 			    <cfcatch type = "any">
 					<cfset type="#cfcatch.Type#" />
 					<cfset message="#cfcatch.cause.message#" />
@@ -232,8 +230,7 @@
 						   	  Exception type: #type#
 							  Message: #message#" />
 				</cfcatch>
-				</cftry>
-			</cfif>
+			</cftry>
 			<cfreturn obj />
 		</cffunction>
 
@@ -241,9 +238,9 @@
 	<cffunction name = "editProductDetails" access = "remote" output = "false" >
 		<cfset editProductquery="" />
 		<cfset var fileName = "#form.editProductID#">
-		<cfset var destination="D:\eclipse\RemoteSystemsTempFiles\ECommerce\images\#fileName#.jpg">
-		<cfif session.loggedInUser.role EQ "admin">
-			<cftry>
+		<cfset var destination=(getDirectoryFromPath( getCurrentTemplatePath() ) &"..\images\product images\#fileName#.jpg")>
+		<cftry>
+			<cfif session.loggedInUser.role EQ "admin">
 				<cfquery name="editProductquery">
 			    	UPDATE product.product SET
 			    	productName = <cfqueryparam value = "#form.editProductName#" cfsqltype = "cf_sql_varchar" />,
@@ -262,6 +259,7 @@
 					<cffile action="upload" filefield="editProductImage" destination="#destination#" nameconflict="overwrite" result="upload_result" accept="image/*">
 					<cfset result = application.products.addPicture(#fileName#)/>
 				</cfif>
+			</cfif>
 			<cfcatch>
 				<cfset var details = "#cfcatch.type#">
 					<cflog type="Error"
@@ -269,20 +267,20 @@
 						text="Exception error ---
 							  type : #details#" />
 			</cfcatch>
-			</cftry>
-		</cfif>
+		</cftry>
 	</cffunction>
 
 	<!--- function to add product image --->
 	<cffunction name="addPicture" acess="public" output="false">
 		<cfargument name = "productID" required = "true" />
-		<cfif session.loggedInUser.role EQ "admin">
-			<cftry>
+		<cftry>
+			<cfif session.loggedInUser.role EQ "admin">
 				<cfquery name="addProductImagequery">
 					UPDATE product.product SET
 					productImage = <cfqueryparam value="#arguments.productID#.jpg" cfsqltype = "cf_sql_varchar">
 					WHERE productID = <cfqueryparam value = "#arguments.productID#" cfsqltype = "cf_sql_integer"  />;
 				</cfquery>
+			</cfif>
 			<cfcatch>
 				<cfset type="#cfcatch.Type#" />
 				<!--- <cfset message="#cfcatch.cause.message#" /> --->
@@ -291,8 +289,7 @@
 					text="Exception error --
 					   	  Exception type: #type# " />
 			</cfcatch>
-			</cftry>
-		</cfif>
+		</cftry>
 	</cffunction>
 
 </cfcomponent>

@@ -13,7 +13,7 @@
 	  	<div class="col-sm-9 container-fluid">
 			<cfinclude template="includes/productAdd.cfm" />
 			search results for "<span id="searchOn"></span>"  sub-categories
-			
+
 			<hr>
 			<div class="row productDetail" id="productDisplay"></div>
 		</div>
@@ -95,13 +95,35 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">Edit Products</h4><br>
-		<span id = "editProductSucessMessage" class = "sucessMessage">product edited sucessfully !!</span>
       </div>
       <div class="modal-body scrollable">
 			<cfinclude template="includes/editProductForm.cfm" />
       </div>
       <div class="modal-footer">
-        <button type = "button" class = "btn btn-default btn-success " id = "editProductSubmit">Edit</button>
+        <button type = "button" class = "btn btn-default btn-success "
+		data-dismiss="modal" id = "editProductSubmit" data-toggle="modal" href="#message">Save Changes</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!--edit product Modal -->
+<div id="message" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Message</h4><br>
+      </div>
+      <div class="modal-body">
+			<span id = "editProductSucessMessage" class = "sucessMessage"><h1>changes saved sucessfully !!</h1></span>
+			<span id = "editProductErrorMessage" class = "editErrorMessage"><h1>Could not save changes !!</h1></span>
+      </div>
+      <div class="modal-footer">
+        <button type = "button" class = "btn btn-default btn-success " data-dismiss="modal">close</button>
       </div>
     </div>
 

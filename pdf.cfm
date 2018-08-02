@@ -9,14 +9,14 @@
 <cfdocument format="PDF">
    <table id="pdfTable" style="width:100%;text-align:center;border: 1px solid black;">
 	<tr>
-		<th style="border-right: 1px solid black;">name</th>
-		<th style="border-right: 1px solid black;">price(Rs)</th>
+		<th style="border-right: 1px solid black;">Name</th>
+		<th style="border-right: 1px solid black;">Price(Rs)</th>
 		<th style="border-right: 1px solid black;">Sub Category</th>
 		<cfif isUserInRole('admin')>
-			<th style="border-right: 1px solid black;">quantity</th>
-			<th>status</th>
+			<th style="border-right: 1px solid black;">Quantity</th>
+			<th>Status</th>
 		<cfelse>
-			<th>availability</th>
+			<th>Availability</th>
 		</cfif>
 	</tr>
 	<cfloop array="#variables.result#" index="product">

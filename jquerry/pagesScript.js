@@ -82,14 +82,10 @@ $(document).ready(function () {
 	    	validateEditProductForm();
 	    });
 	    $("#generatePdf").on("click",function(e){
-	    	fetchProducts(openPdf);
+	    	window.open('pdf.cfm','_blank');
 	    	
 	    });
 	});
-//function to open pdf
-function openPdf(){
-	window.open('pdf.cfm','_blank');
-}
 //function to fetch product details
 function getProductDetails(productID,callback){
 	$.ajax({
@@ -161,38 +157,43 @@ function showProducts(products){
 	if(role.test(document.location.href)){
 		 attributes = 'data-toggle="modal" data-target="#editProductFormModal"';
 	}
-	$.each(productDetails, function( key, value ) {
-		var divClass = "";
-		var image = "";
-		var quantity = "OUT OF STOCK";
-		if(value.IMAGE.length){
-			 image = "images/"+value.IMAGE;
-		}
-		else{
-			image = "https://placehold.it/150x80?text=IMAGE";
-		}
-		if(value.STATUS == "1"){
-			 divClass = "panel panel-primary";
-		}
-		else{
-			divClass = "panel panel-danger";
-		}
-		if(value.QUANTITY > 0){
-			quantity = "AVAILABLE";
-		}
-		   content += '<div class="col-sm-3 productEditPart" data-productID = "'+value.ID+'" '+attributes+' >\
-						         <div class="'+divClass+'">\
-							          <div class="panel-heading">' +value.NAME+ '</div>\
-							          <div class="panel-body">\
-						         		<img src="'+image+'" class="img-responsive" style="width:100%;height:25%;" alt="Image">\
-		   							  </div>\
-							          <div class="panel-footer">\
-						         		'+quantity+'<br>\
-								      	price : Rs.' +value.PRICE+ '<br>\
-								      </div>\
-							</div>\
-						</div>'; 
-		});
+	if(productDetails.length){
+		$.each(productDetails, function( key, value ) {
+			var divClass = "";
+			var image = "";
+			var quantity = "OUT OF STOCK";
+			if(value.IMAGE.length){
+				 image = "images/product images/"+value.IMAGE;
+			}
+			else{
+				image = "https://placehold.it/150x80?text=IMAGE";
+			}
+			if(value.STATUS == "1"){
+				 divClass = "panel panel-primary";
+			}
+			else{
+				divClass = "panel panel-danger";
+			}
+			if(value.QUANTITY > 0){
+				quantity = "AVAILABLE";
+			}
+			   content += '<div class="col-sm-3 productEditPart" '+attributes+' data-productID = "'+value.ID+'"   >\
+							         <div class="'+divClass+'">\
+								          <div class="panel-heading">' +value.NAME+ '</div>\
+								          <div class="panel-body">\
+							         		<img src="'+image+'" class="img-responsive" style="width:100%;height:25%;" alt="Image">\
+			   							  </div>\
+								          <div class="panel-footer">\
+							         		'+quantity+'<br>\
+									      	price : Rs.' +value.PRICE+ '<br>\
+									      </div>\
+								</div>\
+							</div>'; 
+			});
+	}
+	else{
+		content = "<h3>No Products Found ...</h3>"
+	}
 	$("#productDisplay").html(content);
 }
 //function to validate add product form
@@ -340,6 +341,7 @@ function editProductDetails(){
 		} ,
 		error: function(){
 			$("#editProductSucessMessage").css("display","none");
+			$("#editProductErrorMessage").css("display","block");
 			console.log("product detail edit ajax error");
 		}
 	});

@@ -46,6 +46,10 @@ footer {
 	display:none;
 	color:#66ff66;
 }
+.editErrorMessage{
+	display:none;
+	color:#ff0000;
+}
 #statusSelect{
 	margin : 15px;
 }
